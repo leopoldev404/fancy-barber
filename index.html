@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Moderna</title>
+    <title>Chat con Login</title>
     <style>
         /* Stile generale */
         body {
@@ -17,18 +17,78 @@
             color: #333;
         }
 
-        .chat-container {
-            width: 90%;
+        .container {
+            width: 100%;
             max-width: 450px;
-            height: 80%;
             background: #ffffff;
             border-radius: 20px;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Header della chat */
+        /* Stile per login e registrazione */
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6a11cb;
+        }
+
+        .auth-container label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .auth-container input {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 2px solid #dddddd;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .auth-container input:focus {
+            border-color: #6a11cb;
+        }
+
+        .auth-container button {
+            width: 100%;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .auth-container button:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+        }
+
+        .auth-container .toggle-link {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6a11cb;
+            cursor: pointer;
+        }
+
+        /* Stile per la chat */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            height: 600px;
+        }
+
         .chat-header {
             background: linear-gradient(45deg, #6a11cb, #2575fc);
             color: #ffffff;
@@ -40,7 +100,6 @@
             border-top-right-radius: 20px;
         }
 
-        /* Area messaggi */
         .chat-messages {
             flex: 1;
             padding: 20px;
@@ -74,7 +133,6 @@
             border-top-left-radius: 0;
         }
 
-        /* Input messaggi */
         .chat-input {
             display: flex;
             padding: 15px;
@@ -114,22 +172,53 @@
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            Chat Moderna
+    <div class="container">
+        <!-- Login e Registrazione -->
+        <div class="auth-container" id="auth-container">
+            <h2>Accedi</h2>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Inserisci la tua email" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Inserisci la tua password" required>
+            <button id="auth-btn">Entra</button>
+            <div class="toggle-link" id="toggle-link">Non hai un account? Registrati</div>
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <!-- Messaggi dinamici -->
-        </div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Scrivi qui..." autocomplete="off">
-            <button id="send-btn">Invia</button>
+
+        <!-- Chat -->
+        <div class="chat-container" id="chat-container">
+            <div class="chat-header">Chat</div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Scrivi qui..." autocomplete="off">
+                <button id="send-btn">Invia</button>
+            </div>
         </div>
     </div>
+
     <script>
+        const authContainer = document.getElementById("auth-container");
+        const chatContainer = document.getElementById("chat-container");
+        const toggleLink = document.getElementById("toggle-link");
+        const authBtn = document.getElementById("auth-btn");
         const chatMessages = document.getElementById("chat-messages");
         const userInput = document.getElementById("user-input");
         const sendBtn = document.getElementById("send-btn");
+
+        let isLogin = true;
+
+        toggleLink.addEventListener("click", () => {
+            isLogin = !isLogin;
+            document.querySelector(".auth-container h2").textContent = isLogin ? "Accedi" : "Registrati";
+            authBtn.textContent = isLogin ? "Entra" : "Registrati";
+            toggleLink.textContent = isLogin
+                ? "Non hai un account? Registrati"
+                : "Hai già un account? Accedi";
+        });
+
+        authBtn.addEventListener("click", () => {
+            authContainer.style.display = "none";
+            chatContainer.style.display = "flex";
+        });
 
         sendBtn.addEventListener("click", () => {
             const message = userInput.value.trim();
